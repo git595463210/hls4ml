@@ -1188,6 +1188,62 @@ class Masksembles(Layer):
         self.set_attr('scale', self.get_attr('scale'))
         self.set_attr('n_filt', self.get_attr('n_filt'))
 
+class BlockDropout(Layer):
+    _expected_attributes = [
+        Attribute('in_height'),
+        Attribute('in_width'),
+        Attribute('n_in'),
+        
+        Attribute('drop_rate', value_type=float, default=0.0),
+        Attribute('seed', value_type=int, default=0),
+        # change code
+        Attribute('block_size', value_type=int, default=2)
+        # change code
+    ]
+
+    def initialize(self):
+        if self.get_attr('data_format') != 'channels_last':
+            raise Exception('Only channels_last data format supported for BlockDropout layer.')
+        
+        inp = self.get_input_variable()
+        shape = inp.shape
+        dims = inp.dim_names
+        self.add_output_variable(shape, dims)
+        self.set_attr('n_in', self.get_input_variable().size())
+        self.set_attr('drop_rate', self.get_attr('drop_rate'))
+        self.set_attr('seed', self.get_attr('seed'))
+        # change code
+        self.set_attr('in_height', self.get_attr('in_height'))
+        self.set_attr('in_width', self.get_attr('in_width'))
+        self.set_attr('block_size', self.get_attr('block_size'))
+        # change code
+
+class RandomDropout(Layer):
+    _expected_attributes = [
+        Attribute('in_height'),
+        Attribute('in_width'),
+        Attribute('n_in'),
+        
+        Attribute('drop_rate', value_type=float, default=0.0),
+        Attribute('seed', value_type=int, default=0) 
+    ]
+
+    def initialize(self):
+        if self.get_attr('data_format') != 'channels_last':
+            raise Exception('Only channels_last data format supported for BlockDropout layer.')
+        
+        inp = self.get_input_variable()
+        shape = inp.shape
+        dims = inp.dim_names
+        self.add_output_variable(shape, dims)
+        self.set_attr('n_in', self.get_input_variable().size())
+        self.set_attr('drop_rate', self.get_attr('drop_rate'))
+        self.set_attr('seed', self.get_attr('seed'))
+        # change code
+        self.set_attr('in_height', self.get_attr('in_height'))
+        self.set_attr('in_width', self.get_attr('in_width'))
+        # change code
+
 layer_map = {
     'Input'                  : Input,
     'InputLayer'             : Input,
@@ -1243,7 +1299,11 @@ layer_map = {
     # Dropout layer for Bayesian conversion
     'BayesianDropout'        : BayesianDropout, 
     # Masksembles layer for Bayesian conversion
-    'Masksembles'            : Masksembles
+    'Masksembles'            : Masksembles,
+    # Dropout layer for BlockDropout Bayesian conversion
+    'BlockDropout'           : BlockDropout,
+    # Dropout layer for RandomDropout Bayesian conversion
+    'RandomDropout'          : RandomDropout
 }
 
 def register_layer(name, clazz):
