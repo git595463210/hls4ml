@@ -4,7 +4,7 @@ from hls4ml.backends.template import LayerConfigTemplate, FunctionCallTemplate
 
 # Bayesian Dropout template
 block_dropout_config_template = """
-struct config{index} : nnet::dropout_config {{
+struct config{index} : nnet::block_dropout_config {{
     static const unsigned in_height = {in_height};
     static const unsigned in_width = {in_width};
     static const unsigned n_in = {n_in};

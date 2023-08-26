@@ -60,15 +60,16 @@ void random_dropout(hls::stream<data_T> &data_stream, hls::stream<res_T> &res_st
     static std::minstd_rand generator(0);
     float keep_rate = 1 - CONFIG_T::drop_rate;
     float max = generator.max();
-    RandomDropoutLoop: for (int i = 0; i < CONFIG_T::in_height * CONFIG_T::in_width * CONFIG_T::n_in; i++) {
+    //RandomDropoutLoop: for (int i = 0; i < CONFIG_T::in_height * CONFIG_T::in_width * CONFIG_T::n_in; i++) {
+    RandomDropoutLoop: for (int i = 0; i < CONFIG_T::n_in; i++) {
         #pragma HLS UNROLL
         
         
         for (int j = 0; j < CONFIG_T::in_height; j++){
           for (int k = 0; k < CONFIG_T::in_width; k++) {
             typename data_T::value_type zero = {};
-            typename data_T::value_type temp =((float)generator() / max) < keep_rate? data[k + j*in_height + i*in_height*in_width] : zero;
-            res[k + j*in_height + i*in_height*in_width] = temp * (typename data_T::value_type)keep_rate;
+            typename data_T::value_type temp =((float)generator() / max) < keep_rate? data[k + j*CONFIG_T::in_height + i*CONFIG_T::in_height*CONFIG_T::in_width] : zero;
+            res[k + j*CONFIG_T::in_height + i*CONFIG_T::in_height*CONFIG_T::in_width] = temp * (typename data_T::value_type)keep_rate;
          }
         }
     }

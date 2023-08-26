@@ -61,7 +61,7 @@ void random_dropout(
     RandomNumberLoop: for (int i = 0; i < CONFIG_T::n_in; i++) {
                         for (int j = 0; j < CONFIG_T::in_height; j++) {
                           for (int k = 0; k < CONFIG_T::in_width; k++) {
-                            random_array[k + j*in_width + i*in_height*in_width] = ((data_T)generator() / max) < keep_rate;
+                            random_array[k + j*CONFIG_T::in_width + i*CONFIG_T::in_height*CONFIG_T::in_width] = ((data_T)generator() / max) < keep_rate;
         }
       }
     }
@@ -70,8 +70,8 @@ void random_dropout(
     for (int jj = 0; jj < CONFIG_T::in_height; jj++){
       for (int kk = 0; kk < CONFIG_T::in_width; kk++){
         data_T zero = {};
-        data_T temp = random_array_block[kk + jj*in_width + ii*in_height*in_width] ? data[kk + jj*in_width + ii*in_height*in_width] : zero;
-        res[kk + jj*in_width + ii*in_height*in_width] = temp * keep_rate;
+        data_T temp = random_array[kk + jj*CONFIG_T::in_width + ii*CONFIG_T::in_height*CONFIG_T::in_width] ? data[kk + jj*CONFIG_T::in_width + ii*CONFIG_T::in_height*CONFIG_T::in_width] : zero;
+        res[kk + jj*CONFIG_T::in_width + ii*CONFIG_T::in_height*CONFIG_T::in_width] = temp * keep_rate;
     	}
     }
   }

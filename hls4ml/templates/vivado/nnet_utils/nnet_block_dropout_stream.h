@@ -70,8 +70,8 @@ void block_dropout(hls::stream<data_T> &data_stream, hls::stream<res_T> &res_str
             for (int l = 0; l < CONFIG_T::block_size; l++){
               for (int m = 0; m < CONFIG_T::block_size; m++){
                 typename data_T::value_type zero = {};
-                typename data_T::value_type temp =((float)generator() / max) < keep_rate? data[k + j*in_height + i*in_height*in_width + mm + ll*in_width] : zero;
-                res[k + j*in_height + i*in_height*in_width + mm + ll*in_width] = temp * (typename data_T::value_type)keep_rate;
+                typename data_T::value_type temp =((float)generator() / max) < keep_rate? data[k + j*CONFIG_T::in_height + i*CONFIG_T::in_height*CONFIG_T::in_width + m + l*CONFIG_T::in_width] : zero;
+                res[k + j*CONFIG_T::in_height + i*CONFIG_T::in_height*CONFIG_T::in_width + m + l*CONFIG_T::in_width] = temp * (typename data_T::value_type)keep_rate;
             
             
                   }
